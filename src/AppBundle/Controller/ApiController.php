@@ -6,7 +6,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
@@ -33,13 +32,8 @@ class ApiController extends Controller
 		$request = Request::createFromGlobals();
 		
 		$reqMethod = $request->getMethod();
-		
 		$reqContent = $request->getContent();
-		
-		
-		//print_r($reqMethod);
-		//print_r($reqContent);die();
-		
+
 		switch ($reqMethod) {
 		  case 'GET':
 			$this->readAstronauts($id); break;
@@ -65,6 +59,15 @@ class ApiController extends Controller
 
 		$encoder = new JsonEncoder();
 		$normalizer = new CustomGetSetMethodNormalizer();
+		
+		$callback = function ($dateTime) {
+			return $dateTime instanceof \DateTime
+				? $dateTime->format('Y-m-d')
+				: '';
+		};
+
+		$normalizer->setCallbacks(array('date' => $callback));
+		
 		$serializer = new Serializer([$normalizer], [$encoder]);
 
 		$json = $serializer->serialize($astronauts, 'json');

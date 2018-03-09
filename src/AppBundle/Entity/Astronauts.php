@@ -14,7 +14,7 @@ class Astronauts
 {
     /**
      * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -22,25 +22,25 @@ class Astronauts
 
     /**
      * @var string
-	 * @ORM\Column(type="string", length=64)
+	 * @ORM\Column(name="name", type="string", length=64)
      */
     private $name;
 
     /**
      * @var string
-	 * @ORM\Column(type="string", length=64)
+	 * @ORM\Column(name="surname", type="string", length=64)
      */
     private $surname;
 
     /**
-     * @var date
-	 * @ORM\Column(type="date")
+     * @var \DateTime
+	 * @ORM\Column(name="date", type="date")
      */
     private $date;
 
     /**
      * @var string
-	 * @ORM\Column(type="string", length=64)
+	 * @ORM\Column(name="ability", type="string", length=64)
      */
     private $ability;
 
@@ -120,12 +120,10 @@ class Astronauts
     /**
      * Get date
      *
-     * @return date
+     * @return \DateTime
      */
     public function getDate()
     {
-		//$date = $this->date;
-		//return $date->format('Y-m-d');
 		return $this->date;
     }
 

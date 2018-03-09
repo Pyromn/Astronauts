@@ -2,7 +2,6 @@
 
 namespace AppBundle\Repository;
 
-//use AppBundle\Entity\Astronauts;
 use Doctrine\ORM\EntityRepository;
 
 /**
