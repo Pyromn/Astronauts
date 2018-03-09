@@ -33,7 +33,7 @@ class Astronauts
     private $surname;
 
     /**
-     * @var \DateTime
+     * @var date
 	 * @ORM\Column(type="date")
      */
     private $date;
@@ -120,11 +120,13 @@ class Astronauts
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return date
      */
     public function getDate()
     {
-        return $this->date;
+		//$date = $this->date;
+		//return $date->format('Y-m-d');
+		return $this->date;
     }
 
     /**

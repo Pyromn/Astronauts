@@ -10,7 +10,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+use Symfony\Component\Serializer\SerializerInterface;
+
 use Symfony\Component\Validator\Constraints\DateTime;
+
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 class DefaultController extends Controller
 {
@@ -28,7 +33,6 @@ class DefaultController extends Controller
 		//$astronauts = $em->getRepository(Astronauts::class);
 
 		
-		
 		/*
 		//add
 		$astronauts = new Astronauts();
@@ -43,16 +47,39 @@ class DefaultController extends Controller
 		$em->flush();
 		*/
 		
+		
+		/*
+		//update
+		$em = $this->getDoctrine()->getEntityManager();
+		
+		$astronauts = $em->getRepository(Astronauts::class)->find(2);
+		$astronauts->setName("Tomas");
+		
+		$em->persist($astronauts);
+		$em->flush();
+		*/
+		
+		
+		/*
 		//remove
-		//$em = $this->getDoctrine()->getEntityManager();
-		//$astronauts = $em->getRepository(Astronauts::class)->find(1);
-		//$em->remove($astronauts);
-        //$em->flush();
-	
+		$em = $this->getDoctrine()->getEntityManager();
+		$astronauts = $em->getRepository(Astronauts::class)->find(1);
+		$em->remove($astronauts);
+        $em->flush();
+		*/
+		
+		/*
+		//all
 		$em = $this->getDoctrine()->getEntityManager();
 		$astronauts = $em->getRepository(Astronauts::class)->findAll();
+	*/
 	
+
+		$em = $this->getDoctrine()->getEntityManager();
+		$astronauts = $em->getRepository(Astronauts::class)->find(2);
+		
 print_r($astronauts);die();
+
 		
 		// replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
