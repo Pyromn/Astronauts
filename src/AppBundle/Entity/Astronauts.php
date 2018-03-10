@@ -3,10 +3,11 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-//use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Astronauts
+ * @package AppBundle\Entity
  * @ORM\Entity
  * @ORM\Table(name="astronauts")
  */

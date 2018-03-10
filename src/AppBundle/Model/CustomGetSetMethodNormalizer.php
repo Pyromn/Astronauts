@@ -4,6 +4,9 @@ namespace AppBundle\Model;
 
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
+/**
+ * @package AppBundle\Model
+ */
 class CustomGetSetMethodNormalizer extends GetSetMethodNormalizer
 {
 	public function denormalize($data, $class, $format = null, array $context = array())

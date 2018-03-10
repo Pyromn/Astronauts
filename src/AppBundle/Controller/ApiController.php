@@ -6,14 +6,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
-use AppBundle\Model\CustomGetSetMethodNormalizer;
+use AppBundle\Model\AstronautsModel;
 
-use AppBundle\Entity\Astronauts;
-use AppBundle\Repository\AstronautsRepository;
-
+/**
+ * @package AppBundle\Controller
+ */
 class ApiController extends Controller
 {
     /**
@@ -33,89 +31,26 @@ class ApiController extends Controller
 		
 		$reqMethod = $request->getMethod();
 		$reqContent = $request->getContent();
+		
+		$em = $this->getDoctrine()->getEntityManager();
 
+		$astroModel = new AstronautsModel($em);
+		
 		switch ($reqMethod) {
 		  case 'GET':
-			$this->readAstronauts($id); break;
+			$result = $astroModel->readAstronauts($id); break;
 		  case 'PUT':
-			$this->updateAstronaut($id, $reqContent); break;
+			$result = $astroModel->updateAstronaut($reqContent); break;
 		  case 'POST':
-			$this->createAstronaut($reqContent); break;
+			$result = $astroModel->createAstronaut($reqContent); break;
 		  case 'DELETE':
-			$this->removeAstronaut($id); break;
+			$result = $astroModel->removeAstronaut($id); break;
 		}
+		
+		$response = new Response($result);
+		
+		$response->send();
 		
 		exit;
     }
-	
-	private function readAstronauts($id)
-    {
-		$em = $this->getDoctrine()->getEntityManager();
-		
-		if(isset($id))
-			$astronauts = $em->getRepository(Astronauts::class)->find($id);
-		else
-			$astronauts = $em->getRepository(Astronauts::class)->findAll();
-
-		$encoder = new JsonEncoder();
-		$normalizer = new CustomGetSetMethodNormalizer();
-		
-		$callback = function ($dateTime) {
-			return $dateTime instanceof \DateTime
-				? $dateTime->format('Y-m-d')
-				: '';
-		};
-
-		$normalizer->setCallbacks(array('date' => $callback));
-		
-		$serializer = new Serializer([$normalizer], [$encoder]);
-
-		$json = $serializer->serialize($astronauts, 'json');
-		
-		$response = new Response($json);
-		
-		$response->send();
-	}
-	
-	private function updateAstronaut($json)
-    {
-		$encoder = new JsonEncoder();
-		$normalizer = new CustomGetSetMethodNormalizer();
-		$serializer = new Serializer([$normalizer], [$encoder]);
-
-		$astronaut = $serializer->deserialize($json, Astronauts::class, 'json');
-		
-		$em = $this->getDoctrine()->getEntityManager();
-		$em->persist($astronaut);
-		$em->flush();
-		
-		exit;
-	}
-	
-	private function createAstronaut($json)
-    {
-		$encoder = new JsonEncoder();
-		$normalizer = new CustomGetSetMethodNormalizer();
-		$serializer = new Serializer([$normalizer], [$encoder]);
-
-		$astronaut = $serializer->deserialize($json, Astronauts::class, 'json');
-		
-		$em = $this->getDoctrine()->getEntityManager();
-		$em->persist($astronaut);
-		$em->flush();
-		
-		exit;
-	}
-	
-	private function removeAstronaut($id)
-    {
-		$em = $this->getDoctrine()->getEntityManager();
-		
-		$astronauts = $em->getRepository(Astronauts::class)->find($id);
-		
-		$em->remove($astronauts);
-        $em->flush();
-		
-		exit;
-	}
 }
