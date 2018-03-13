@@ -1,1 +1,10 @@
-body {background-color:black;}
+header a {color: black;}
+header h1 {padding-top: 75px;}
+
+th, td {padding: 5px 10px;}
+
+form label {width: 75px;}
+form input {width: 250px;}
+#form_date {width: 300px; display: inline;}
+#form_date select {padding: 0px 5px; margin-right: 5px;}
+form button {margin: 10px 0px;}

@@ -15,67 +15,67 @@ use AppBundle\Repository\AstronautsRepository;
  */
 class AstronautsModel
 {
-	public function __construct($entityManager)
-	{
-		$this->em = $entityManager;
-	}
-	
-	public function readAstronauts($id)
+    public function __construct($entityManager)
     {
-		if(isset($id))
-			$astronauts = $this->em->getRepository(Astronauts::class)->find($id);
-		else
-			$astronauts = $this->em->getRepository(Astronauts::class)->findAll();
+        $this->em = $entityManager;
+    }
+	
+    public function readAstronauts($id = null)
+    {
+        if(isset($id))
+            $astronauts = $this->em->getRepository(Astronauts::class)->find($id);
+        else
+            $astronauts = $this->em->getRepository(Astronauts::class)->findAll();
 
-		$encoder = new JsonEncoder();
-		$normalizer = new CustomGetSetMethodNormalizer();
-		
-		$callback = function ($dateTime) {
-			return $dateTime instanceof \DateTime
-				? $dateTime->format('Y-m-d')
-				: '';
-		};
+        $encoder = new JsonEncoder();
+        $normalizer = new CustomGetSetMethodNormalizer();
 
-		$normalizer->setCallbacks(array('date' => $callback));
-		
-		$serializer = new Serializer([$normalizer], [$encoder]);
+        $callback = function ($dateTime) {
+            return $dateTime instanceof \DateTime
+                ? $dateTime->format('Y-m-d')
+                : '';
+        };
 
-		$json = $serializer->serialize($astronauts, 'json');
-		
-		return $json;
-	}
-	
-	public function updateAstronaut($json)
-    {
-		return $this->setAstronaut($json);
-	}
-	
-	public function createAstronaut($json)
-    {
-		return $this->setAstronaut($json);
-	}
-	
-	private function setAstronaut($json)
-    {
-		$encoder = new JsonEncoder();
-		$normalizer = new CustomGetSetMethodNormalizer();
-		$serializer = new Serializer([$normalizer], [$encoder]);
+        $normalizer->setCallbacks(array('date' => $callback));
 
-		$astronaut = $serializer->deserialize($json, Astronauts::class, 'json');
-		
-		$this->em->persist($astronaut);
-		$this->em->flush();
-		
-		return '';
-	}
+        $serializer = new Serializer([$normalizer], [$encoder]);
+
+        $json = $serializer->serialize($astronauts, 'json');
+
+        return $json;
+    }
 	
-	public function removeAstronaut($id)
+    public function updateAstronaut($json)
     {
-		$astronauts = $this->em->getRepository(Astronauts::class)->find($id);
+        return $this->setAstronaut($json);
+    }
+	
+    public function createAstronaut($json)
+    {
+        return $this->setAstronaut($json);
+    }
+	
+    private function setAstronaut($json)
+    {
+        $encoder = new JsonEncoder();
+        $normalizer = new CustomGetSetMethodNormalizer();
+        $serializer = new Serializer([$normalizer], [$encoder]);
+
+        $astronaut = $serializer->deserialize($json, Astronauts::class, 'json');
+
+        $this->em->persist($astronaut);
+        $this->em->flush();
+
+        return '';
+    }
+	
+    public function removeAstronaut($id)
+    {
+        $astronauts = $this->em->getRepository(Astronauts::class)->find($id);
+
+        $this->em->remove($astronauts);
+        $this->em->flush();
 		
-		$em->remove($astronauts);
-        $em->flush();
-		
-		return '';
-	}
+        return '';
+    }
 }

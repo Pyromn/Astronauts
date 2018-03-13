@@ -19,38 +19,38 @@ class ApiController extends Controller
      */
     public function indexAction()
     {
-		exit;
+        exit;
     }
 	
 	/**
      * @Route("/api/astronauts/{id}", defaults={"id"=null}, name="api/astronauts")
      */
-	public function astronautsAction($id)
+    public function astronautsAction($id)
     {
-		$request = Request::createFromGlobals();
-		
-		$reqMethod = $request->getMethod();
-		$reqContent = $request->getContent();
-		
-		$em = $this->getDoctrine()->getEntityManager();
+        $request = Request::createFromGlobals();
 
-		$astroModel = new AstronautsModel($em);
-		
-		switch ($reqMethod) {
-		  case 'GET':
-			$result = $astroModel->readAstronauts($id); break;
-		  case 'PUT':
-			$result = $astroModel->updateAstronaut($reqContent); break;
-		  case 'POST':
-			$result = $astroModel->createAstronaut($reqContent); break;
-		  case 'DELETE':
-			$result = $astroModel->removeAstronaut($id); break;
-		}
-		
-		$response = new Response($result);
-		
-		$response->send();
-		
-		exit;
+        $reqMethod = $request->getMethod();
+        $reqContent = $request->getContent();
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $astroModel = new AstronautsModel($em);
+
+        switch ($reqMethod) {
+          case 'GET':
+                $result = $astroModel->readAstronauts($id); break;
+          case 'PUT':
+                $result = $astroModel->updateAstronaut($reqContent); break;
+          case 'POST':
+                $result = $astroModel->createAstronaut($reqContent); break;
+          case 'DELETE':
+                $result = $astroModel->removeAstronaut($id); break;
+        }
+
+        $response = new Response($result);
+
+        $response->send();
+
+        exit;
     }
 }
